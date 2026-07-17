@@ -23,24 +23,26 @@ Claude fetches, reads, and implements — no copy-pasting required.
 
 ## Installation
 
-```bash
-flow mcp add --transport http confluence-context https://github.com/brunoog-ciet/mcp-confluence-context
-```
-
-After running, restart Claude Code.
-
-**Prerequisites**
-
-- Claude Code CLI installed
-- Confluence Personal Access Token (PAT)
-
-**Generating a Personal Access Token in Confluence**
+**Step 1 — Generate a Confluence Personal Access Token**
 
 1. Open Confluence and log in
 2. Click your profile picture → **Profile**
 3. In the sidebar, click **Settings**
-4. Click **Personal Access Tokens**
-5. Click **Create token**, set a name and expiry, then copy the generated token — it is shown only once
+4. Click **Personal Access Tokens** → **Create token**
+5. Set a name (e.g. `mcp-confluence-context`) and an expiry date
+6. Copy the generated token — it is shown only once
+
+**Step 2 — Register the connector**
+
+```bash
+flow mcp add --transport http confluence-context https://github.com/brunoog-ciet/mcp-confluence-context
+```
+
+The setup will prompt for your Confluence URL and the token generated above.
+
+**Step 3 — Restart Claude Code**
+
+The connector will be available after restarting.
 
 ## Available tools
 
@@ -53,28 +55,10 @@ After running, restart Claude Code.
 
 ## Multi-tenant support
 
-Run the setup script once per organization. Each run registers an independent MCP instance in Claude Code:
-
-```bash
-./setup.sh  # first org
-./setup.sh  # second org
-```
-
-Each instance gets its own identifier (e.g. `mcp-confluence-mycompany`) and can be addressed directly in the prompt.
+Run the setup command once per organization. Each run registers an independent MCP instance in Claude Code, addressable by its own identifier (e.g. `mcp-confluence-mycompany`).
 
 ## Known limitations
 
 - Works with Confluence Data Center/Server via PAT
 - Confluence Cloud with OAuth is not supported in this version
 - Cache expires after 1h by default (configurable via `CACHE_TTL_SECONDS`)
-
----
-
-## Publication metadata
-
-| Field | Value |
-|---|---|
-| **Repository** | https://github.com/brunoog-ciet/mcp-confluence-context |
-| **Flow Agent (identifier)** | `ciandt-mcp-confluence-context` |
-| **Category** | _(set at publication time)_ |
-| **Channel** | _(set at publication time)_ |
