@@ -23,41 +23,16 @@ Claude fetches, reads, and implements — no copy-pasting required.
 
 ## Installation
 
+```bash
+flow mcp add --transport http confluence-context https://github.com/brunoog-ciet/mcp-confluence-context
+```
+
+After running, restart Claude Code.
+
 **Prerequisites**
 
-- Node.js 20+
 - Claude Code CLI installed
 - Confluence Personal Access Token (PAT)
-
-**macOS / Linux**
-
-```bash
-git clone https://github.com/brunoog-ciet/mcp-confluence-context.git
-cd mcp-confluence-context
-npm install && npm run build
-./setup.sh
-```
-
-**Windows (PowerShell)**
-
-```powershell
-git clone https://github.com/brunoog-ciet/mcp-confluence-context.git
-cd mcp-confluence-context
-npm install; npm run build
-.\setup.ps1
-```
-
-The setup script will prompt for:
-
-| Field | Description |
-|---|---|
-| Tenant name | Short identifier, e.g. `mycompany` |
-| `CONFLUENCE_PAT` | Your Confluence Personal Access Token |
-| `CONFLUENCE_BASE_URL` | Instance URL, e.g. `https://confluence.mycompany.com` |
-| `CONFLUENCE_SPACE_KEY` | Default space key to filter searches (e.g. `DEV`). Optional. |
-| `CACHE_TTL_SECONDS` | Cache duration in seconds (default: `3600`) |
-
-After setup, **restart Claude Code**.
 
 **Generating a Personal Access Token in Confluence**
 
