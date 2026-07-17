@@ -1,45 +1,105 @@
-## Confluence como contexto no Claude Code
+## Confluence as context in Claude Code
 
-Você para de implementar para copiar documentação do Confluence, cola no prompt, continua — e na próxima task faz de novo. Esse conector elimina essa fricção: o Claude busca e injeta o conteúdo da página diretamente, sem sair do editor.
+You stop implementing to copy documentation from Confluence, paste it into the prompt, continue — and do it all over again on the next task. This connector eliminates that friction: Claude fetches and injects the page content directly, without leaving the editor.
 
-## Como funciona
+## How it works
 
-Você menciona uma página ou um termo de busca no prompt. O servidor consulta o Confluence via REST API, armazena em cache local e entrega o conteúdo como contexto. O Claude usa esse conteúdo para guiar a implementação.
+You mention a page or a search term in the prompt. The server queries Confluence via REST API, stores the result in a local cache, and delivers the content as context. Claude uses that content to guide the implementation.
 
-## Quando faz sentido usar
+## When it makes sense to use
 
-- Implementar algo que já tem especificação no Confluence (schema, contrato de API, fluxo de negócio)
-- Navegar hierarquias de documentação sem abrir o browser
-- Manter documentação do Confluence atualizada a partir do próprio Claude Code
+- Implementing something that already has a specification in Confluence (schema, API contract, business flow)
+- Navigating documentation hierarchies without opening a browser
+- Keeping Confluence documentation up to date directly from Claude Code
 
-## Exemplo concreto
+## Concrete example
 
 ```
-busque no Confluence a documentação sobre "integração com o gateway de pagamentos"
-e use o conteúdo para implementar o client em src/payments/gateway.ts
+search Confluence for "payment gateway integration"
+and use the content to implement the client at src/payments/gateway.ts
 ```
 
-O Claude busca, lê e implementa — sem copiar e colar nada.
+Claude fetches, reads, and implements — no copy-pasting required.
 
-## Pré-requisitos
+## Installation
+
+**Prerequisites**
 
 - Node.js 20+
-- Claude Code CLI instalado
-- Personal Access Token do Confluence
+- Claude Code CLI installed
+- Confluence Personal Access Token (PAT)
 
-## Limitações conhecidas
+**macOS / Linux**
 
-- Funciona com Confluence Data Center/Server via PAT (token pessoal)
-- Confluence Cloud com OAuth não está suportado nesta versão
-- O cache expira em 1h por padrão (configurável)
+```bash
+git clone https://github.com/brunoog-ciet/mcp-confluence-context.git
+cd mcp-confluence-context
+npm install && npm run build
+./setup.sh
+```
+
+**Windows (PowerShell)**
+
+```powershell
+git clone https://github.com/brunoog-ciet/mcp-confluence-context.git
+cd mcp-confluence-context
+npm install; npm run build
+.\setup.ps1
+```
+
+The setup script will prompt for:
+
+| Field | Description |
+|---|---|
+| Tenant name | Short identifier, e.g. `mycompany` |
+| `CONFLUENCE_PAT` | Your Confluence Personal Access Token |
+| `CONFLUENCE_BASE_URL` | Instance URL, e.g. `https://confluence.mycompany.com` |
+| `CONFLUENCE_SPACE_KEY` | Default space key to filter searches (e.g. `DEV`). Optional. |
+| `CACHE_TTL_SECONDS` | Cache duration in seconds (default: `3600`) |
+
+After setup, **restart Claude Code**.
+
+**Generating a Personal Access Token in Confluence**
+
+1. Open Confluence and log in
+2. Click your profile picture → **Profile**
+3. In the sidebar, click **Settings**
+4. Click **Personal Access Tokens**
+5. Click **Create token**, set a name and expiry, then copy the generated token — it is shown only once
+
+## Available tools
+
+| Tool | Description |
+|---|---|
+| `get_page` | Fetches the full content of a page by ID |
+| `search_pages` | Searches pages by text — use when you don't know the ID |
+| `list_children` | Lists child pages of a parent — useful for navigating hierarchies |
+| `update_page` | Saves a page as a draft in Confluence Storage Format |
+
+## Multi-tenant support
+
+Run the setup script once per organization. Each run registers an independent MCP instance in Claude Code:
+
+```bash
+./setup.sh  # first org
+./setup.sh  # second org
+```
+
+Each instance gets its own identifier (e.g. `mcp-confluence-mycompany`) and can be addressed directly in the prompt.
+
+## Known limitations
+
+- Works with Confluence Data Center/Server via PAT
+- Confluence Cloud with OAuth is not supported in this version
+- Cache expires after 1h by default (configurable via `CACHE_TTL_SECONDS`)
 
 ---
 
-## Metadados de publicação
+## Publication metadata
 
-| Campo | Valor |
+| Field | Value |
 |---|---|
-| **Repositório** | https://github.com/brunoog-ciet/mcp-confluence-context |
-| **Flow Agent (identificador)** | `ciandt-mcp-confluence-context` |
-| **Categoria** | _(definir no momento da publicação)_ |
-| **Canal** | _(definir no momento da publicação)_ |
+| **Repository** | https://github.com/brunoog-ciet/mcp-confluence-context |
+| **Flow Agent (identifier)** | `ciandt-mcp-confluence-context` |
+| **Category** | _(set at publication time)_ |
+| **Channel** | _(set at publication time)_ |
